@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Open CGM</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" type="image/x-icon" href="Images/favicon.ico" />
+    <link href="styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/open.cgm.min.js?ver=170105.1600"></script>
+</head>
+<body>
+
+    <div id="monitor-view" data-role="view" data-title="Monitor" data-layout="default-layout" data-init="monitor_init" data-show="monitor_show" data-before-hide="monitor_hide">
+        <div data-role="content" style="font-weight: bold; text-align: center;">
+            <div id="monitor-portrait" style="margin-bottom: .5em;">
+                <div style="padding: 1em 3em 0em 3em;">
+                    <div style="float: left; width: 25%; padding-top: 0.1em;">
+                        <div style="font-size: .75em;" class="km-state-disabled">min ago</div>
+                        <div style="margin-bottom: .75em;"><span class="monitor-timespan" style="font-size: 1em;"></span>&nbsp;min</div>
+                        <div style="font-size: .75em;" class="km-state-disabled">shift</div>
+                        <div><span class="monitor-svgspan" style="font-size: 1em;"></span>&nbsp;mg</div>
+                    </div>
+                    <div class="monitor-sgv" style="float: left; font-size: 5em; width: 50%;"></div>
+                    <div style="float: left; font-size: 1em; width: 25%; text-align: left; padding-top: 1em;">
+                        <span class="monitor-icon1 k-font-icon k-i-arrow-s" style="font-size: 2em;">&nbsp;</span>
+                        <span class="monitor-icon2 k-font-icon k-i-arrow-s" style="font-size: 2em;">&nbsp;</span>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div style="position: absolute; top: 3.5em; font-size: .75em; right: 2em">
+                    <span class="km-state-disabled">HbA1c</span><div class="monitor-hbAac" style="font-size: 1.75em;"></div>
+                </div>
+                <div style="margin: 0 auto; width: 75%; padding: 1em; clear: both; min-height: 4.75em;" class="km-widget km-navbar monitor-block">
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">min</span><div class="monitor-min" style="font-size: 1.75em;"></div>
+                    </div>
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">avg</span><div class="monitor-avg" style="font-size: 2em;"></div>
+                    </div>
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">max</span><div class="monitor-max" style="font-size: 1.75em;"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="monitor-landscape" style="display: none; position: absolute; z-index: 1000; right: 0%; width: 40%; background-color: transparent;">
+                <div style="padding: 0.2em;">
+                    <div style="float: left; width: 25%;">
+                        <div style="font-size: .75em;" class="km-state-disabled">min ago</div>
+                        <div><span class="monitor-timespan" style="font-size: 1em;"></span>&nbsp;min</div>
+                        <div style="font-size: .75em;" class="km-state-disabled">shift</div>
+                        <div><span class="monitor-svgspan" style="font-size: 1em;"></span>&nbsp;mg</div>
+                    </div>
+                    <div class="monitor-sgv" style="float: left; font-size: 3.5em; width: 50%;"></div>
+                    <div style="float: left; font-size: 1em; width: 25%; text-align: left;">
+                        <span class="monitor-icon1" style="font-size: 2em;">&nbsp;</span>
+                        <span class="monitor-icon2" style="font-size: 2em;">&nbsp;</span>
+                    </div>
+                </div>
+                <div style="width: 40%; margin: 0 auto" class="monitor-block">
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">min</span><div class="monitor-min" style="font-size: 1.2em;"></div>
+                    </div>
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">avg</span><div class="monitor-avg" style="font-size: 1.2em;"></div>
+                    </div>
+                    <div style="float: left; width: 33.3%; font-size: .75em;">
+                        <span class="km-state-disabled">max</span><div class="monitor-max" style="font-size: 1.2em;"></div>
+                    </div>
+                </div>
+                <div style="position: absolute; top: 5.9em; font-size: .75em; right: 1.5em">
+                    <span class="km-state-disabled">HbA1c</span><div class="monitor-hbAac" style="font-size: 1.2em;"></div>
+                </div>
+            </div>
+            <div id="chartWrapper" style="margin: 0 auto 0 auto;">
+                <canvas id="chart"></canvas>
+                <nav id="monitor-buttongroup" data-role="navbar" style="display: none;">
+                    <ul id="timespan2-buttongroup">
+                        <li>&nbsp;3 h
+                        </li>
+                        <li>&nbsp;6 h
+                        </li>
+                        <li>12 h
+                        </li>
+                        <li>24 h
+                        </li>
+                        <li>48 h
+                        </li>
+                    </ul>
+                    <ul id="dayspan2-buttongroup">
+                        <li>&nbsp;7 d
+                        </li>
+                        <li>14 d
+                        </li>
+                        <li>30 d
+                        </li>
+                        <li>60 d
+                        </li>
+                        <li>90 d
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div id="nextUpdateTime" style="margin: 0.7rem; font-size: 0.75rem;"></div>
+        </div>
+    </div>
+
+    <div id="log-view" data-role="view" data-title="Scan Log" data-layout="default-layout" data-init="log_init" data-show="log_show" data-before-hide="log_hide">
+        <ul id="log-listview"></ul>
+    </div>
+
+    <script id="log-item" type="text/x-kendo-template">
+        <div style="font-weight: bold; text-align: center;" data-id="${data.ID}" data-datetime="${data.Tagdate}" data-rawbg="${data.Rawbg}" data-sgv="${data.Sgv}" data-direction="${data.Direction}" data-search="${data.Search}">
+            <div style="float:left; width: 25%;">
+                #=kendo.toString(kendo.parseDate(data.Tagdate),'MMM dd HH:mm')#
+            <div style="margin-top:.7em;"><span style="font-size: .7em;">raw: </span>${data.Rawbg}</div>
+            </div>
+            <div style="float:left;font-size:3.5em;width:55%;">${data.Sgv}</div>
+            <div style="float:left; font-size: 1em; width: 20%; text-align:left;">
+                   <span style="font-size:2em;" class="icon1"></span>
+                   <span style="font-size:2em;" class="icon2"></span>
+            </div>
+        </div>
+    </script>
+
+    <div id="settings-view" data-role="view" data-title="Settings" data-layout="default-layout" data-init="settings_init" data-show="settings_show" data-before-hide="settings_save">
+        <ul data-role="listview" data-style="inset" data-type="group">
+            <li>
+                <ul>
+                    <li>
+                        <label>
+                            Secret Key:
+                                <input id="settings-key" type="password" value="password" />
+                        </label>
+                    </li>
+                    <li>
+                        <div style="text-align: center;">
+                            <a data-role="button" data-icon="toprated" data-click="settings_save">Save</a>
+                            <a data-role="button" data-icon="settings" data-click="settings_clear_storage">Reset&nbsp;</a>
+                        </div>
+                    </li>
+                    <li>Data source:&nbsp;<strong><span id="dataSourceName" style="color:red;"></span></strong>
+                        <ul id="settings-datasource" class="km-navbar">
+                            <li>A</li>
+                            <li>B</li>
+                            <li>C</li>
+                            <li>D</li>
+                        </ul>
+                    </li>
+                    <li style="display: none;">
+                        <label>
+                            Refresh on load:
+                                <input id="settings-dataloadonstart" />
+                        </label>
+                    </li>
+                    <li style="display: none;">
+                        <div class="app_message_wrapper">&nbsp;</div>
+                    </li>
+                    <li>
+                        <label>
+                            <span>Auto refresh:</span>
+                            <input id="settings-fetchdata" />
+                        </label>
+                    </li>
+                    <li id="fetchdataInterval" class="toRight" style="display: none;"><span>Interval min:</span>
+                        <input id="settings-fetchInterval" class="inputNumber" />
+                    </li>
+                    <li id="alarmEnabled" style="display: none;">
+                        <label>
+                            <span id="alarmSwitch">Alarm:</span>
+                            <input id="settings-alarm" />
+                        </label>
+                    </li>
+                    <li id="alarmHipo" class="toRight" style="display: none;"><span>Alarm hipo:</span>
+                        <input id="alarm_hipo" class="inputNumber" />
+                    </li>
+                    <li id="alarmHiper" class="toRight" style="display: none;"><span>Alarm hiper:</span>
+                        <input id="alarm_hiper" class="inputNumber" />
+                    </li>
+                    <li id="alarmMode" style="display: none;">
+                        <label>
+                            <span id="alarmModeSwitch">Another sound:</span>
+                            <input id="settings-alarmMode" />
+                        </label>
+                    </li>
+                    <li id="alarmTest" class="toRight" style="display: none;">
+                        <span>Sound test:
+                        </span>
+                        <span style="text-align: right;">
+                            <a id="runAlarmTest" data-role="button" data-icon="sounds" data-click="settings_run_alarm">Run</a>
+                            <a id="stopAlarmTest" data-role="button" data-icon="stop" data-click="settings_stop_alarm" style="display: none;">Stop</a>
+                        </span>
+                    </li>
+                    <li id="deviceInfoLabel" style="display: none;">
+                        <label id="deviceInfo"></label>
+                    </li>
+                    <li class="thresholds toRight"><span>Norm min:</span>
+                        <input id="norm_min" class="inputNumber" />
+                    </li>
+                    <li class="thresholds toRight"><span>Norm max:</span>
+                        <input id="norm_max" class="inputNumber" />
+                    </li>
+                    <li class="thresholds toRight"><span>Hipo:</span>
+                        <input id="alert_hipo" class="inputNumber" />
+                    </li>
+                    <li class="thresholds toRight"><span>Hiper:</span>
+                        <input id="alert_hiper" class="inputNumber" />
+                    </li>
+                    <li>Skins:
+                        <ul id="settings-skin1" class="km-navbar">
+                            <li>A
+                            </li>
+                            <li>B
+                            </li>
+                            <li>C
+                            </li>
+                            <li>D
+                            </li>
+                        </ul>
+                        <ul id="settings-skin2" class="km-navbar">
+                            <li>E
+                            </li>
+                            <li>F
+                            </li>
+                            <li>G
+                            </li>
+                            <li>H
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div id="default-layout" data-role="layout" data-id="default-layout">
+        <header data-role="header">
+            <nav data-role="navbar">
+                <a id="reload-button" data-role="button" data-icon="refresh" data-align="left" data-click="app_reload" style="margin-right: 2px;"></a>
+                <a id="runMonitorAlarmTest" data-role="button" data-icon="sounds" data-click="monitor_run_alarm" data-align="left" style="display: none;"></a>
+                <a id="stopMonitorAlarmTest" data-role="button" data-icon="stop" data-click="monitor_stop_alarm" data-align="left" style="display: none;"></a>
+                <a id="up-button" data-role="button" data-icon="up" data-align="left" style="margin-left: .5em; display: none;"
+                    data-click="app_goto_top_list">Up</a>
+                <a id="sort-button" data-role="button" data-icon="sort-desc" data-align="right" style="margin-left: .5em; display: none;"
+                    data-click="log_sort">Sort</a>
+                <span id="title" data-role="view-title"></span>
+            </nav>
+            <div class="km-header km-widget km-navbar km-view-title app_message_wrapper app_message_notification" style="display: none;">
+            </div>
+        </header>
+        <footer data-role="footer">
+            <div class="km-widget km-header">
+                <nav data-role="navbar">
+                    <ul id="timespan-buttongroup">
+                        <li>&nbsp;3 h
+                        </li>
+                        <li>&nbsp;6 h
+                        </li>
+                        <li>12 h
+                        </li>
+                        <li>24 h
+                        </li>
+                        <li>48 h
+                        </li>
+                    </ul>
+                    <ul id="dayspan-buttongroup" style="margin-top: .5rem;">
+                        <li>&nbsp;7 d
+                        </li>
+                        <li>14 d
+                        </li>
+                        <li>30 d
+                        </li>
+                        <li>60 d
+                        </li>
+                        <li>90 d
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div id="default-tabstrip">
+                <a href="#monitor-view" data-icon="camera">Monitor</a>
+                <a href="#log-view" data-icon="bookmarks">Scan Log</a>
+                <a data-icon="action" data-badge="0">Refresh</a>
+                <a href="#settings-view" data-icon="settings">Settings</a>
+                <a href="license.html" data-icon="info">About</a>
+            </div>
+        </footer>
+    </div>
+
+    <audio id="audioPlayerControl" style="display: none;">
+        <source src="sounds/alarm.mp3" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function worker_background_function() {
+            if (fetch_auto()) {
+                app_next_update();
+                app_fetch_data();
+            }
+        }
+    </script>
+
+</body>
+</html>
